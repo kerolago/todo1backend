@@ -265,3 +265,14 @@ exports.uploadImage = (req, res) => {
     }
 
 }
+exports.getimage = (req, res) => {
+    var file = req.params.archivo;
+    var path_file = './uploads/' + file;
+    fs.exists(path_file, function(exists) {
+        if (exists) {
+            res.sendFile(path.resolve(path_file));
+        } else {
+            res.status(404).send({ message: 'LA IMAGEN NO EXISTE' });
+        }
+    });
+}
