@@ -13,6 +13,8 @@ const app = express();
 const userRouter = require('./routers/user');
 const rolRouter = require('./routers/rol');
 const clienRouter = require('./routers/cliente');
+const ventaRouter = require('./routers/venta');
+const detventaRouter = require('./routers/detventa');
 
 
 
@@ -36,6 +38,8 @@ app.use((req, res, next) => {
 app.use('/api/user', userRouter);
 app.use('/api/rol', rolRouter);
 app.use('/api/cliente', clienRouter);
+app.use('/api/venta', ventaRouter);
+app.use('/api/detventa', detventaRouter);
 
 //HANDLING ERRORS
 app.use((req, res, next) => {
