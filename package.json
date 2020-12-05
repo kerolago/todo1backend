@@ -1,0 +1,19 @@
+{
+  "name": "todo1backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kerolago/todo1backend.git"
+  },
+  "author": "Kevin M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kerolago/todo1backend/issues"
+  },
+  "homepage": "https://github.com/kerolago/todo1backend#readme"
+}
