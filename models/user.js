@@ -29,6 +29,14 @@ const modelo = mongoose.Schema({
         type: Boolean,
         require: true,
         default: false
+    },
+    direccion: {
+        type: String,
+        require: true
+    },
+    telefono: {
+        type: String,
+        require: true
     }
 });
 

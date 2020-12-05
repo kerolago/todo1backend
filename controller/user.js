@@ -116,6 +116,7 @@ exports.post = (req, res) => {
                                 email: req.body.email,
                                 pw: hash,
                                 rol: req.body.rol
+
                             });
 
                             Model.save()
@@ -264,6 +265,163 @@ exports.delete = (req, res) => {
         })
         .catch(ex => {
             console.log(es);
+
+            res.status(500).json({
+                modelo: null,
+                filas: 0,
+                error_estado: true,
+                error: ex,
+                mensaje: '!ERROR¡'
+            });
+        });
+}
+exports.postc = (req, res) => {
+    model.findOne({
+            email: req.body.email,
+            userName: req.body.email
+        })
+        .exec()
+        .then(result => {
+            console.log(result);
+
+            if (result) {
+                return res.status(409).json({
+                    modelo: null,
+                    rows: 0,
+                    error_estado: false,
+                    error: '',
+                    mensaje: '!EL EMAIL O USUARIO YA EXISTE¡'
+                });
+            } else {
+                bcrypt.hash(req.body.pw, null, null, (err, hash) => {
+                    if (err) {
+                        console.log(err);
+
+                        return res.status(500).json({
+                            modelo: null,
+                            filas: 0,
+                            error_estado: true,
+                            error: err,
+                            mensaje: '!ERROR HASH¡'
+                        });
+                    } else {
+                        const Model = new model({
+                            _id: new mongoose.Types.ObjectId,
+                            nombre: req.body.nombre,
+                            userName: req.body.userName,
+                            email: req.body.email,
+                            pw: hash,
+                            rol: 'cliente',
+                            direccion: req.body.direccion,
+                            telefono: req.body.telefono,
+
+
+                        });
+
+                        Model.save()
+                            .then(Result => {
+                                console.log(Result);
+
+                                res.status(200).json({
+                                    modelo: Result,
+                                    filas: 1,
+                                    error_estado: false,
+                                    error: '',
+                                    mensaje: '!REGISTRO ADICIONADO¡'
+                                });
+                            })
+                            .catch(ex => {
+                                console.log(ex);
+
+                                res.status(500).json({
+                                    modelo: null,
+                                    filas: 0,
+                                    error_estado: true,
+                                    error: ex,
+                                    mensaje: '!ERROR¡'
+                                });
+                            });
+                    }
+                });
+            }
+        })
+        .catch(exe => {
+            console.log(exe);
+
+            res.status(500).json({
+                modelo: null,
+                filas: 0,
+                error_estado: true,
+                error: ex,
+                mensaje: '!ERROR¡'
+            });
+        });
+}
+exports.get1 = (req, res) => {
+    model.find(req.params.id)
+        .sort({ nombre: 1, userName: 1, email: 1, pw: 1, rol: 1, direccion: 1, telefono: 1 })
+        .select('_id nombre userName email pw rol direccion telefono')
+        .select()
+        .exec()
+        .then(result => {
+            console.log(result);
+
+            if (result) {
+                res.status(200).json({
+                    modelo: result,
+                    filas: result.length,
+                    error_estado: false,
+                    error: '',
+                    mensaje: '!OK¡'
+                });
+            } else {
+                res.status(404).json({
+                    modelo: null,
+                    filas: 0,
+                    error_estado: false,
+                    error: "",
+                    mensaje: '!NO EXISTE DATOS!'
+                });
+            }
+        })
+        .catch(ex => {
+            console.log(ex);
+
+            res.status(500).json({
+                modelo: null,
+                filas: 0,
+                error_estado: true,
+                error: ex,
+                mensaje: '!ERROR¡'
+            });
+        });
+}
+exports.getId1 = (req, res) => {
+    model.findOne({ _id: req.params.id })
+        .sort({ nombre: 1, userName: 1, email: 1, pw: 1, rol: 1, direccion: 1, telefono: 1 })
+        .select('_id nombre userName email pw rol direccion telefono')
+        .exec()
+        .then(result => {
+
+            if (result) {
+                res.status(200).json({
+                    modelo: result,
+                    filas: 1,
+                    error_estado: false,
+                    error: '',
+                    mensaje: '!OK¡'
+                });
+            } else {
+                res.status(204).json({
+                    modelo: null,
+                    filas: 0,
+                    error_estado: false,
+                    error: '',
+                    mensaje: '!NO EXISTEN DATOS¡'
+                });
+            }
+        })
+        .catch(ex => {
 
             res.status(500).json({
                 modelo: null,
