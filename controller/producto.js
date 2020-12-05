@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
-const model = require('../models/venta');
-
+const model = require('../models/producto');
+const express = require('express');
+const fs = require('fs-extra');
+const path = require('path');
 
 //GET
 exports.get = (req, res) => {
     model.find(req.params.id)
-        .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-        .select('_id fecha id_cliente estado ')
+        .sort({ nombre: 1, descrpcion: 1, entrada: 1, sallida: 1, estado: 1, precio: 1, categoria: 1 })
+        .select('_id nombre descripcion entrada salida estado precio categoria')
         .exec()
         .then(result => {
             console.log(result);
@@ -46,8 +48,8 @@ exports.getId = (req, res) => {
         model.findOne({
                 _id: req.params.id
             })
-            .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-            .select('_id fecha id_cliente estado')
+            .sort({ nombre: 1, descrpcion: 1, entrada: 1, sallida: 1, estado: 1, precio: 1, categoria: 1 })
+            .select('_id nombre descripcion entrada salida estado precio categoria')
             .exec()
             .then(result => {
                 if (result) {
@@ -84,10 +86,13 @@ exports.getId = (req, res) => {
 exports.post = (req, res) => {
         const Model = new model({
             _id: new mongoose.Types.ObjectId,
-            fecha: req.body.fecha,
-            id_cliente: req.body.id_cliente,
-            estado: req.body.estado
-
+            nombre: req.body.nombre,
+            descripcion: req.body.descripcion,
+            entrada: req.body.entrada,
+            salida: req.body.salida,
+            estado: req.body.estado,
+            precio: req.body.precio,
+            categoria: req.body.categoria
         });
 
         console.log('----- model', Model);
@@ -98,9 +103,12 @@ exports.post = (req, res) => {
                 res.status(200).json({
                     modelo: {
                         _id: Model._id,
-                        fecha: Model.fecha,
-                        id_cliente: Model.id_cliente,
-                        estado: Model.estado
+                        nombre: Model.nombre,
+                        descripcion: Model.descripcion,
+                        entrada: Model.entrada,
+                        salida: Model.salida,
+                        estado: Model.estado,
+                        categoria: Model.categoria
                     },
                     filas: 1,
                     error_estado: false,
@@ -174,4 +182,86 @@ exports.delete = (req, res) => {
                 mensaje: '!ERROR¡'
             });
         })
+}
+exports.uploadImage = (req, res) => {
+    if (req.files) {
+        var filePath = req.files.archivo.path;
+        var fileSplit = filePath.split('/');
+        var fileName = fileSplit[1];
+        var extSplit = fileName.split('\.');
+        var fileExt = extSplit[1];
+        var nombreOriginal = req.files.archivo.originalFilename;
+
+        if (fileExt == 'png' ||
+            fileExt == 'PNG' ||
+            fileExt == 'jpg' ||
+            fileExt == 'JPG' ||
+            fileExt == 'webp' ||
+            fileExt == 'jpeg' ||
+            fileExt == 'bmp' ||
+            fileExt == 'tiff' ||
+            fileExt == 'tif' ||
+            fileExt == 'gif' ||
+            fileExt == 'bitmap' ||
+            fileExt == 'svg') {
+
+            const Model = new model({
+                _id: new mongoose.Types.ObjectId,
+                nombre1: fileName,
+                nombreOriginal: nombreOriginal,
+                ext: fileExt,
+                nombre: req.body.nombre,
+                descripcion: req.body.descripcion,
+                entrada: req.body.entrada,
+                salida: req.body.salida,
+                estado: req.body.estado,
+                precio: req.body.precio,
+                categoria: req.body.categoria
+
+
+
+            });
+            console.log('--- model'.Model);
+            Model.save()
+                .then(result => {
+                    console.log(result);
+                    res.status(200).json({
+                        modelo: Model,
+                        filas: 1,
+                        error_estado: false,
+                        mensaje: '!REGISTRO ADICIONADO¡'
+                    });
+                })
+                .catch(ex => {
+                    res.status(500).json({
+                        modelo: null,
+                        filas: 0,
+                        error_estado: true,
+                        error: ex,
+                        mensaje: '!ERRROR¡'
+                    });
+                });
+
+        } else {
+            fs.unlink(filePath, () => {
+                res.status(201).json({
+                    modelo: null,
+                    filas: 0,
+                    error_estado: false,
+                    error: '',
+                    mensaje: '!LA EXTENCION DEL ARCHIVO NO ES VALIDA¡'
+                });
+            });
+        }
+
+    } else {
+        res.status(202).json({
+            modelo: null,
+            filas: 0,
+            error_estado: false,
+            error: '',
+            mensaje: '!NO SE HA CARGADO EL ARCHIVO¡'
+        });
+    }
+
 }

@@ -15,7 +15,8 @@ const rolRouter = require('./routers/rol');
 const clienRouter = require('./routers/cliente');
 const ventaRouter = require('./routers/venta');
 const detventaRouter = require('./routers/detventa');
-
+const compraRouter = require('./routers/productro');
+const productoRouter = require('./routers/categoria');
 
 
 //MIDDLEWARES
@@ -40,6 +41,9 @@ app.use('/api/rol', rolRouter);
 app.use('/api/cliente', clienRouter);
 app.use('/api/venta', ventaRouter);
 app.use('/api/detventa', detventaRouter);
+app.use('/api/compra', compraRouter);
+app.use('/api/producto', compraRouter);
+app.use('./api/producto', productoRouter);
 
 //HANDLING ERRORS
 app.use((req, res, next) => {

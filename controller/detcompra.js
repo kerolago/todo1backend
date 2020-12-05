@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const model = require('../models/venta');
+const model = require('../models/detcompra');
 
 
 //GET
 exports.get = (req, res) => {
     model.find(req.params.id)
-        .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-        .select('_id fecha id_cliente estado ')
+        .sort({ cantidad: 1, total: 1, id_compra: 1, id_producto: 1 })
+        .select('_id cantidad total id_compra id_producto')
         .exec()
         .then(result => {
             console.log(result);
@@ -46,8 +46,8 @@ exports.getId = (req, res) => {
         model.findOne({
                 _id: req.params.id
             })
-            .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-            .select('_id fecha id_cliente estado')
+            .sort({ cantidad: 1, total: 1, id_compra: 1, id_producto: 1 })
+            .select('_id cantidad total id_compra id_producto')
             .exec()
             .then(result => {
                 if (result) {
@@ -84,9 +84,10 @@ exports.getId = (req, res) => {
 exports.post = (req, res) => {
         const Model = new model({
             _id: new mongoose.Types.ObjectId,
-            fecha: req.body.fecha,
-            id_cliente: req.body.id_cliente,
-            estado: req.body.estado
+            cantidad: req.body.cantidad,
+            total: req.body.total,
+            id_compra: req.body.id_compra,
+            id_producto: req.body.id_producto
 
         });
 
@@ -98,9 +99,10 @@ exports.post = (req, res) => {
                 res.status(200).json({
                     modelo: {
                         _id: Model._id,
-                        fecha: Model.fecha,
-                        id_cliente: Model.id_cliente,
-                        estado: Model.estado
+                        cantidad: Model.cantidad,
+                        total: Model.total,
+                        id_compra: Model.id_compra,
+                        id_producto: Model.id_producto
                     },
                     filas: 1,
                     error_estado: false,

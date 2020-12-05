@@ -7,13 +7,10 @@ const modelo = mongoose.Schema({
         type: Date,
         require: true
     },
-    id_cliente: {
-        type: String,
-        require: true
-    },
     estado: {
         type: String,
-        require: true
+        requie: true
     }
+
 });
-module.exports = mongoose.model('venta', modelo);
+module.exports = mongoose.model('compras', modelo);

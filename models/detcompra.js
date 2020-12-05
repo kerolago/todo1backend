@@ -3,17 +3,21 @@ const mongoose = require('mongoose');
 const modelo = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
 
-    fecha: {
-        type: Date,
-        require: true
-    },
-    id_cliente: {
+    cantidad: {
         type: String,
         require: true
     },
-    estado: {
+    total: {
+        type: String,
+        require: true
+    },
+    id_compra: {
+        type: String,
+        require: true
+    },
+    id_producto: {
         type: String,
         require: true
     }
 });
-module.exports = mongoose.model('venta', modelo);
+module.exports = mongoose.model('detcompra', modelo);

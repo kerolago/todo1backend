@@ -20,4 +20,4 @@ const modelo = mongoose.Schema({
         require: true
     }
 });
-module.exports = mongoose.model('cliente', modelo);
+module.exports = mongoose.model('detventa', modelo);

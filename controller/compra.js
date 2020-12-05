@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const model = require('../models/venta');
+const model = require('../models/compra');
 
 
 //GET
 exports.get = (req, res) => {
     model.find(req.params.id)
-        .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-        .select('_id fecha id_cliente estado ')
+        .sort({ fecha: 1, estado: 1 })
+        .select('_id fecha estado')
         .exec()
         .then(result => {
             console.log(result);
@@ -46,8 +46,8 @@ exports.getId = (req, res) => {
         model.findOne({
                 _id: req.params.id
             })
-            .sort({ fecha: 1, id_cliente: 1, estado: 1 })
-            .select('_id fecha id_cliente estado')
+            .sort({ fecha: 1, estad: 1 })
+            .select('_id fecha estado')
             .exec()
             .then(result => {
                 if (result) {
@@ -85,7 +85,6 @@ exports.post = (req, res) => {
         const Model = new model({
             _id: new mongoose.Types.ObjectId,
             fecha: req.body.fecha,
-            id_cliente: req.body.id_cliente,
             estado: req.body.estado
 
         });
@@ -99,7 +98,6 @@ exports.post = (req, res) => {
                     modelo: {
                         _id: Model._id,
                         fecha: Model.fecha,
-                        id_cliente: Model.id_cliente,
                         estado: Model.estado
                     },
                     filas: 1,
