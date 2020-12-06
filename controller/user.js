@@ -311,10 +311,9 @@ exports.postc = (req, res) => {
                             userName: req.body.userName,
                             email: req.body.email,
                             pw: hash,
-                            rol: 'cliente',
+                            rol: 'user',
                             direccion: req.body.direccion,
                             telefono: req.body.telefono,
-
 
                         });
 
